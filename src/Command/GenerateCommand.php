@@ -24,6 +24,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+use Rector\RectorGenerator\Generator\SimpleCodeGenerator;
+
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\GenerateCommandInteractiveModeTest
  */
@@ -111,17 +113,27 @@ final class GenerateCommand extends Command
 
         $targetDirectory = getcwd();
 
-        $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
-            $templateFileInfos,
-            $templateVariables,
-            $rectorRecipe,
-            $targetDirectory
-        );
+//        $isUnwantedOverride = $this->overrideGuard->isUnwantedOverride(
+//            $templateFileInfos,
+//            $templateVariables,
+//            $rectorRecipe,
+//            $targetDirectory
+//        );
+//
+//        if ($isUnwantedOverride) {
+//            $this->symfonyStyle->warning('No files were changed');
+//            return ShellCode::SUCCESS;
+//        }
 
-        if ($isUnwantedOverride) {
-            $this->symfonyStyle->warning('No files were changed');
-            return ShellCode::SUCCESS;
-        }
+
+        // TODO: Use the code samples and generate the initial code for the ::process method
+        // The code before is $rectorRecipe['codeBefore'] and the code after is $rectorRecipe['codeAfter']
+        // we need to check if the before and after are generating just one statement. and if that is the case to try
+        // to generate the code for the process method.
+
+        $generator = new SimpleCodeGenerator();
+        [$newNodeName, $suggestedChanges] = $generator->getDiffCode($rectorRecipe->getCodeBefore(), $rectorRecipe->getCodeAfter());
+        $templateVariables['__SuggestedCode__'] = "/**\n// Suggested code to generate the new nodes.\n$suggestedChanges\nreturn $newNodeName;\n*/\n";
 
         $generatedFilePaths = $this->fileGenerator->generateFiles(
             $templateFileInfos,

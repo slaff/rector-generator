@@ -40,6 +40,7 @@ final class __Name__ extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         // change the node
+        __SuggestedCode__
 
         return $node;
     }

@@ -45,6 +45,7 @@ final class __Name__ extends AbstractRector implements ConfigurableRectorInterfa
     public function refactor(Node $node): ?Node
     {
         // change the node
+        __SuggestedCode__
 
         return $node;
     }
